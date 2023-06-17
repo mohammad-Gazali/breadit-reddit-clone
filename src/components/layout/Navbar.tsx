@@ -2,14 +2,13 @@ import Link from "next/link";
 import { Icons } from "../common/Icons";
 import { buttonVariants } from "../ui/Button";
 import { getAuthSession } from "@/lib/auth";
+import { UserAccountNav } from "../auth/UserAccountNav";
 
 
 
 const Navbar = async () => {
 
   const session = await getAuthSession();
-
-  console.log(session)
 
   return (
     <nav className="fixed top-0 inset-x-0 h-fit bg-zinc-100 border-b border-zinc-300 z-[10] py-2">
@@ -18,8 +17,8 @@ const Navbar = async () => {
                 <Icons.logo className='h-8 w-8 sm:h-6 sm:w-6' />
                 <p className='hidden text-zinc-700 text-sm font-medium md:block'>Breadit</p>
             </Link>
-            {session ? (
-              <p>You are logged in</p>
+            {session?.user.id ? (
+              <UserAccountNav user={session.user} />
             ) : (
               <Link href='/sign-in' className={buttonVariants()}>
                   Sign In
