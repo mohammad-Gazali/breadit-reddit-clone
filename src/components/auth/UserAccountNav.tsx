@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
-import UserAvatar from "./UserAvatar";
+import UserAvatar from "../common/UserAvatar";
 
 
 
