@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
-import "@/styles/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { ReactNode } from "react";
 import { Toaster } from "@/components/ui/Toaster";
 import Providers from "@/components/Providers";
+import "@/styles/globals.css";
 
 
 

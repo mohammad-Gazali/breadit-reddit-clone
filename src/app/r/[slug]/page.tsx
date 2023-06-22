@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 
 
 
+// TODO: add generateStaticParams
+
 interface PageProps {
     params: {
         slug: string;
