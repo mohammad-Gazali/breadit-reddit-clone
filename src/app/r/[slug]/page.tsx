@@ -1,4 +1,5 @@
 import MiniCreatePost from "@/components/subreddit_page/MiniCreatePost";
+import PostFeed from "@/components/subreddit_page/PostFeed";
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -20,12 +21,23 @@ const Page = async ({ params }: PageProps) => {
 
     const session = await getAuthSession();
 
+    const totalPostCount = await db.post.count({
+        where: {
+            subreddit: {
+                name: slug,
+            }
+        }
+    });
+
     const subreddit = await db.subreddit.findUnique({
         where: {
             name: slug,
         },
         include: {
             posts: {
+                orderBy: {
+                    createdAt: "desc",
+                },
                 include: {
                     author: true,
                     votes: true,
@@ -34,7 +46,7 @@ const Page = async ({ params }: PageProps) => {
                 },
                 take: INFINITE_SCROLLING_PAGINATION_RESULTS,
             }
-        }
+        },
     });
 
     if (!subreddit) return notFound();
@@ -45,6 +57,12 @@ const Page = async ({ params }: PageProps) => {
                 r/{subreddit.name}
             </h1>
             <MiniCreatePost session={session} />
+            <PostFeed
+            totalPostCount={totalPostCount}
+            initialPosts={subreddit.posts}
+            session={session}
+            subredditName={subreddit.name}
+            />
         </>
     )
 }
