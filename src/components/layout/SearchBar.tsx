@@ -17,6 +17,8 @@ import { Users } from "lucide-react";
 import debounce from "lodash.debounce";
 import { useOnClickOutside } from "@/hooks/use-on-click-outside";
 
+
+
 const SearchBar = () => {
 	const [input, setInput] = useState("");
 
@@ -30,7 +32,6 @@ const SearchBar = () => {
 		data: queryResult,
 		refetch,
 		isFetched,
-		isFetching,
 	} = useQuery({
 		queryKey: ["search-query"],
 		enabled: false,
@@ -51,7 +52,7 @@ const SearchBar = () => {
 
 	const debounceRequest = useCallback(() => {
 		request();
-	}, []);
+	}, [request]);
 
 	useOnClickOutside(commandRef, () => {
 		setInput("");

@@ -25,7 +25,7 @@ const Page = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     }
-	}, []);
+	}, [router]);
 
 	return (
 		<div

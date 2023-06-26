@@ -29,7 +29,7 @@ const PostFeed: FC<PostFeedProps> = ({
 		threshold: 1,
 	});
 
-	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+	const { data, fetchNextPage } = useInfiniteQuery({
 		queryKey: ["infinite-query"],
 		queryFn: async ({ pageParam = 1 }) => {
 			const queryEndpoint = `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}${
