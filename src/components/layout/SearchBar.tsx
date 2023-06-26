@@ -9,27 +9,28 @@ import {
 	CommandItem,
 	CommandList,
 } from "../ui/Command";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Prisma, Subreddit } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Users } from "lucide-react";
 import debounce from "lodash.debounce";
-
-
+import { useOnClickOutside } from "@/hooks/use-on-click-outside";
 
 const SearchBar = () => {
-
 	const [input, setInput] = useState("");
 
 	const router = useRouter();
+
+	const pathname = usePathname();
+
+	const commandRef = useRef<HTMLDivElement>(null);
 
 	const {
 		data: queryResult,
 		refetch,
 		isFetched,
 		isFetching,
-    
 	} = useQuery({
 		queryKey: ["search-query"],
 		enabled: false,
@@ -44,23 +45,34 @@ const SearchBar = () => {
 		},
 	});
 
-  const request = debounce(() => {
-    refetch()
-  }, 300)
+	const request = debounce(() => {
+		refetch();
+	}, 300);
 
-  const debounceRequest = useCallback(() => {
-    request()
-  }, []);
+	const debounceRequest = useCallback(() => {
+		request();
+	}, []);
+
+	useOnClickOutside(commandRef, () => {
+		setInput("");
+	});
+
+	useEffect(() => {
+		setInput("");
+	}, [pathname])
 
 	return (
-		<Command className="relative rounded-lg border max-w-lg z-50 overflow-visible">
+		<Command
+			ref={commandRef}
+			className="relative rounded-lg border max-w-lg z-50 overflow-visible"
+		>
 			<CommandInput
 				value={input}
 				className="outline-none border-none focus:border-none focus:outline-none ring-0"
 				onValueChange={(text) => {
-          setInput(text);
-          debounceRequest();
-        }}
+					setInput(text);
+					debounceRequest();
+				}}
 				placeholder="Search communinties..."
 			/>
 			{input.length > 0 ? (
@@ -78,7 +90,7 @@ const SearchBar = () => {
 									}}
 								>
 									<Users className="mr-2 h-4 w-4" />
-                  <a href={`/r/${subreddit.name}`}>r/{subreddit.name}</a>
+									<a href={`/r/${subreddit.name}`}>r/{subreddit.name}</a>
 								</CommandItem>
 							))}
 						</CommandGroup>
