@@ -9,6 +9,7 @@ import { Post, User, Vote } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import CommentsSection from "@/components/post_page/CommentsSection";
 
 interface PageProps {
 	params: {
@@ -16,8 +17,8 @@ interface PageProps {
 	};
 }
 
-// export const dynamic = "force-dynamic";
-// export const fetchCache = "force-no-store";
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 // TODO: add generateStaticParams
 
@@ -71,13 +72,14 @@ const Page = async ({ params }: PageProps) => {
 						{post?.title ?? cachedPost.title}
 					</h1>
 					<EditorOutput content={post?.content ?? cachedPost.content} />
-					{/* <Suspense
+					<Suspense
 						fallback={
 							<Loader2 className="h-5 w-5 animate-spin text-zinc-500" />
 						}
 					>
+						{/* @ts-expect-error server component */}
 						<CommentsSection postId={post?.id ?? cachedPost.id} />
-					</Suspense> */}
+					</Suspense>
 				</div>
 			</div>
 		</div>
